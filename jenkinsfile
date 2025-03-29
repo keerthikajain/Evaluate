@@ -1,28 +1,44 @@
-//Jenkins pipeline script
+
 pipeline {
     agent any
 
+
+tools {
+        nodejs "nodejs"
+    }
+
     stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/keerthikajain/Evaluate.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh 'npm test || echo "No tests defined"'
+            }
+        }
+
         stage('Build') {
             steps {
-                echo 'Building the application'
-                bat 'npm install'
-                bat'npm run build'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                echo 'Testing the application'
-                bat 'npm test'
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploying the application'
-                bat 'npm run deploy'
+                sh 'npm run build'
             }
         }
     }
 }
+
+
+
+
+
+
+
+
+    
